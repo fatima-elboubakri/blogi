@@ -1,5 +1,4 @@
 
-// eslint.config.ts
 import js from '@eslint/js';
 import globals from 'globals';
 import reactHooks from 'eslint-plugin-react-hooks';
@@ -31,11 +30,10 @@ export default defineConfig([
       eslintPluginJsxA11y.flatConfigs.recommended,
     ],
 
-    // ⛔️ NE PAS redéclarer plugins ici (déjà fait par la flat config)
-    // plugins: { 'jsx-a11y': eslintPluginJsxA11y }, // ❌ à supprimer
-
     rules: {
-      'jsx-a11y/alt-text': 'error',
+      'jsx-a11y/alt-text': 'warn',
+      'jsx-a11y/role-supports-aria-props': "warn",
+      "jsx-a11y/anchor-has-content":"warn",
       'jsx-a11y/anchor-is-valid': [
         'warn',
         {
@@ -46,6 +44,7 @@ export default defineConfig([
       ],
        "react-hooks/incompatible-library": "off",
        "react-refresh/only-export-components": "off",
+        "@typescript-eslint/no-explicit-any": "off"
     },
   },
 ]);

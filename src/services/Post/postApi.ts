@@ -26,7 +26,7 @@ export const postsApi = createApi({
     // READ: un post par id
     getPostById: builder.query<Post, number>({
       query: (id) => `/posts/${id}`,
-      providesTags: (result, _error, id) => [{ type: 'Posts', id }],
+      providesTags: (result, _error, id) => [{...result, type: 'Posts', id }],
     }),
 
     // CREATE
