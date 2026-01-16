@@ -26,7 +26,7 @@ export const store = configureStore({
   devTools: !isProd,
   preloadedState,
   // for perf eviter too many rerendring
-  enhancers: (getDefaultEnhancers) =>
+  enhancers: (getDefaultEnhancers: any) =>
     getDefaultEnhancers({
       autoBatch: true, 
     }).concat(batchedSubscribe(debounceNotify)),

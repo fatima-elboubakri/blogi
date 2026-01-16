@@ -1,5 +1,5 @@
-import * as React from "react";
-const Logo = (props: React.SVGProps) => (
+
+const Logo = (props: any) => (
   <svg
     xmlns:svg="http://www.w3.org/2000/svg"
     xmlns="http://www.w3.org/2000/svg"
