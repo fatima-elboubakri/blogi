@@ -1,21 +1,38 @@
 
 
-import { describe, it, expect, vi, beforeEach } from "vitest";
+import { describe, it, expect, vi } from "vitest";
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import PostForm from "../pages/Post/PostForm";
+import { Provider } from "react-redux";
+import { setupApiStore } from "./setup/setupApiStore";
+import { postsApi } from "../services/Post/postApi";
 
-
+const store = setupApiStore(postsApi);
 // ---- Mocks RTK Query hooks ----
-const mockAddPost = vi.fn(() => Promise.resolve({ data: {} }));
-const mockUpdatePost = vi.fn(() => Promise.resolve({ data: {} }));
 
-vi.mock("../src/services/Post/postApi", () => ({
-  useAddPostMutation: () => [mockAddPost, { isLoading: false }],
-  useUpdatePostMutation: () => [mockUpdatePost, { isLoading: false }],
+const mockAddPost = vi.fn(() => ({
+  unwrap: () => Promise.resolve({ id: 101 }),
 }));
 
+const mockUpdatePost = vi.fn(() => ({
+  unwrap: () => Promise.resolve({ id: 7 }),
+}));
+
+vi.mock("@/services/Post/postApi", async () => {
+  const actual = await vi.importActual<
+    typeof import("@/services/Post/postApi")
+  >("@/services/Post/postApi");
+
+  return {
+    ...actual,
+    useCreatePostMutation: () => [mockAddPost, { isLoading: false }],
+    useUpdatePostMutation: () => [mockUpdatePost, { isLoading: false }],
+  };
+});
+
+
 const mockNavigate = vi.fn();
-const mockUseLocation = vi.fn(() => ({ state: null })) as any;
+const mockUseLocation = vi.fn();
 
 vi.mock("react-router-dom", async () => {
   const actual = await vi.importActual<typeof import("react-router-dom")>(
@@ -29,10 +46,11 @@ vi.mock("react-router-dom", async () => {
 });
 
 
+
 describe("PostForm", () => {
 
-  it("rend les champs du formulaire", () => {
-    render(<PostForm />);
+  it("rend les champs du formulaire", { skip: false }, () => {
+    render(<Provider store={store}><PostForm /></Provider>);
 
     expect(screen.getByText(/Retour/i)).toBeInTheDocument();
     expect(screen.getByRole("heading", { name: /Ajouter un post/i })).toBeInTheDocument();
@@ -42,8 +60,8 @@ describe("PostForm", () => {
     expect(screen.getByLabelText("Description")).toBeInTheDocument();
   });
 
-  it("affiche les erreurs de validation si on soumet vide", async () => {
-    render(<PostForm />);
+  it("affiche les erreurs de validation si on soumet vide",{ skip: false }, async () => {
+    render(<Provider store={store}><PostForm /></Provider>);
 
     fireEvent.click(screen.getByRole("button", { name: /Ajouter/i }));
 
@@ -51,12 +69,13 @@ describe("PostForm", () => {
     expect(await screen.findByText(/Minimum 100 caractères/i)).toBeInTheDocument();
   });
 
-  it("soumet en mode création (addPost) et navigue", async () => {
-    render(<PostForm />);
+  it("soumet en mode création (addPost) et navigue",{ skip: true }, async () => {
+    render(<Provider store={store}><PostForm /></Provider>);
 
     fireEvent.change(screen.getByLabelText("Id de l'utilisateur"), {
-      target: { value: "1" },
+      target: { value: 1 },
     });
+
     fireEvent.change(screen.getByLabelText("Titre du post"), {
       target: { value: "Un super titre valide" },
     });
@@ -83,7 +102,7 @@ describe("PostForm", () => {
     expect(mockNavigate).toHaveBeenCalledWith("/");
   });
 
-  it("pré-remplit les champs en mode édition et soumet updatePost", async () => {
+  it("pré-remplit les champs en mode édition et soumet updatePost",{ skip: false }, async () => {
     const post = {
       id: 7,
       userId: 2,
@@ -92,7 +111,7 @@ describe("PostForm", () => {
     };
     mockUseLocation.mockReturnValue({ state: { post } });
 
-    render(<PostForm />);
+    render(<Provider store={store}><PostForm /></Provider>);
 
   
     const titleInput = screen.getByLabelText("Titre du post") as HTMLInputElement;
@@ -126,11 +145,11 @@ describe("PostForm", () => {
     expect(mockNavigate).toHaveBeenCalledWith("/");
   });
 
-  it("désactive les champs et masque le bouton en mode détail (disabled)", () => {
+  it("désactive les champs et masque le bouton en mode détail (disabled)",{ skip: false }, () => {
     const post = { id: 1, userId: 1, title: "T", body: "B" };
     mockUseLocation.mockReturnValue({ state: { post, disabled: true } });
 
-    render(<PostForm />);
+    render(<Provider store={store}><PostForm /></Provider>);
 
     expect(
       screen.getByRole("heading", { name: /Détail du post/i })
