@@ -134,6 +134,13 @@ describe("PostTable", () => {
       error: null,
     });
 
+    
+if (!window.confirm) {
+  // @ts-ignore
+  window.confirm = () => true;
+}
+
+
     const confirmSpy = vi.spyOn(window, "confirm").mockReturnValue(true);
 
     render(
