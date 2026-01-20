@@ -23,5 +23,8 @@ export default defineConfig({
     globals: true,
     environment: "jsdom",
     setupFiles: "src/tests/setup/setup-tests.ts",
+    pool: "forks",
+    maxConcurrency: 1,
+    maxWorkers: 1,
   },
 });
