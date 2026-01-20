@@ -134,12 +134,10 @@ describe("PostTable", () => {
       error: null,
     });
 
-    
 if (!window.confirm) {
-// @ts-expect-error — happy-dom does not implement window.confirm in CI
-window.confirm = () => true;
+  // @ts-ignore
+  window.confirm = () => true;
 }
-
 
     const confirmSpy = vi.spyOn(window, "confirm").mockReturnValue(true);
 
