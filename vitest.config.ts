@@ -5,7 +5,7 @@ import path from "node:path";
 export default defineConfig({
   test: {
     globals: true,
-    environment: "jsdom",
+    environment: process.env.CI ? "happy-dom" : "jsdom",
     setupFiles: "src/tests/setup/setup-tests.ts",
   },
 
