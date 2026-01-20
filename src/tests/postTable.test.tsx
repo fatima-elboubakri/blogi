@@ -136,8 +136,8 @@ describe("PostTable", () => {
 
     
 if (!window.confirm) {
-  // @ts-ignore
-  window.confirm = () => true;
+// @ts-expect-error — happy-dom does not implement window.confirm in CI
+window.confirm = () => true;
 }
 
 
