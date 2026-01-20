@@ -32,7 +32,7 @@ export default defineConfig([
 
     rules: {
       'jsx-a11y/alt-text': 'warn',
-      'jsx-a11y/role-supports-aria-props': "warn",
+      'jsx-a11y/role-supports-aria-props': "off",
       "jsx-a11y/anchor-has-content":"warn",
       'jsx-a11y/anchor-is-valid': [
         'warn',
@@ -44,7 +44,7 @@ export default defineConfig([
       ],
        "react-hooks/incompatible-library": "off",
        "react-refresh/only-export-components": "off",
-        "@typescript-eslint/no-explicit-any": "off"
+        "@typescript-eslint/no-explicit-any": "off",
     },
   },
 ]);

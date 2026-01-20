@@ -32,7 +32,7 @@ vi.mock("@/services/Post/postApi", async () => {
 
 
 const mockNavigate = vi.fn();
-const mockUseLocation = vi.fn(() => ({ state: null }));
+const mockUseLocation = vi.fn();
 
 vi.mock("react-router-dom", async () => {
   const actual = await vi.importActual<typeof import("react-router-dom")>(

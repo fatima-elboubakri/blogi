@@ -1,13 +1,8 @@
 import { describe, expect, it } from "vitest";
 import { postsApi } from "../services/Post/postApi";
 import { setupApiStore } from "./setup/setupApiStore";
-import { fetchBaseQuery } from "@reduxjs/toolkit/query";
 
 const store = setupApiStore(postsApi);
-
-baseQuery: fetchBaseQuery({
-  baseUrl: import.meta.env.VITE_API_URL,
-})
 
 describe("postsApi", () => {
   it("gets all posts",{ skip: false }, async () => {
@@ -37,7 +32,7 @@ describe("postsApi", () => {
     const result = await store.dispatch(
       postsApi.endpoints.updatePost.initiate(payload)
     );
-    expect(result.data.id).toBe(1);
+    expect(result?.data?.id).toBe(1);
   });
 
   it("deletes a post", { skip: false },async () => {
